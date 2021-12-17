@@ -90,9 +90,9 @@ app_license = "MIT"
 # ---------------
 # Override standard doctype classes
 
-# override_doctype_class = {
-# 	"ToDo": "custom_app.overrides.CustomToDo"
-# }
+override_doctype_class = {
+	"Payroll Entry": "project_payroll.project_payroll.payroll_entry.payroll.PayrollEntryOverride"
+}
 
 # Document Events
 # ---------------
@@ -136,7 +136,7 @@ app_license = "MIT"
 # ------------------------------
 #
 # override_whitelisted_methods = {
-# 	"frappe.desk.doctype.event.event.get_events": "project_payroll.event.get_events"
+# 	"erpnext.payroll.doctype.payroll_entry.payroll_entry.": "project_payroll.event.get_events"
 # }
 #
 # each overriding function accepts a `data` argument;

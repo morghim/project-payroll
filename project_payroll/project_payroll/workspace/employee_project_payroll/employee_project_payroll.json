@@ -1,0 +1,44 @@
+{
+ "category": "Modules",
+ "charts": [],
+ "creation": "2021-12-17 15:43:57.318386",
+ "developer_mode_only": 0,
+ "disable_user_customization": 0,
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "extends": "Payroll",
+ "extends_another_page": 1,
+ "hide_custom": 0,
+ "icon": "Payroll",
+ "idx": 0,
+ "is_default": 0,
+ "is_standard": 1,
+ "label": "Employee Project Payroll",
+ "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Employee Projects Payroll",
+   "link_to": "Employee Projects Payroll",
+   "link_type": "DocType",
+   "onboard": 1,
+   "type": "Link"
+  }
+ ],
+ "modified": "2021-12-17 15:46:23.650883",
+ "modified_by": "Administrator",
+ "module": "Project Payroll",
+ "name": "Employee Project Payroll",
+ "onboarding": "Payroll",
+ "owner": "Administrator",
+ "pin_to_bottom": 0,
+ "pin_to_top": 0,
+ "shortcuts": [
+  {
+   "doc_view": "List",
+   "label": "Employee Project Payroll",
+   "link_to": "Employee Projects Payroll",
+   "type": "DocType"
+  }
+ ]
+}
