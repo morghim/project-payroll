@@ -16,7 +16,7 @@ it makes genral entry for project and salary component account for all employees
 - add employee and from data and to date to valid this project and add percent pay for all project
 ![This is an image](https://github.com/morghim/project-payroll/blob/master/img/step2.png)
 
-- in entry payroll check is project payroll 
+- in payroll entry check is project payroll 
 ![This is an image](https://github.com/morghim/project-payroll/blob/master/img/step3.png)
 
 #### License
