@@ -5,7 +5,7 @@ from erpnext.accounts.doctype.accounting_dimension.accounting_dimension import (
     get_accounting_dimensions,
 )
 from frappe.utils import flt
-import erpnext
+from erpnext import get_company_currency
 
 
 class PayrollEntryOverride(PayrollEntry):
@@ -26,6 +26,15 @@ class PayrollEntryOverride(PayrollEntry):
                 salary_components
             )
 
+    def get_account(self, component_dict = None):
+        if not self.is_project_payroll_:
+            return super().get_account()
+        account_dict = {}
+        for key, amount in component_dict.items():
+                account = self.get_salary_component_account(key[0])
+                account_dict[(account, key[1], key[2])] = account_dict.get((account, key[1], key[2]), 0) + amount
+        return account_dict
+
     def get_salary_component_total_with_project(self, component_type):
         salary_components = self.get_salary_components_with_project(component_type)
         if salary_components:
@@ -42,18 +51,21 @@ class PayrollEntryOverride(PayrollEntry):
                         add_component_to_accrual_jv_entry = False
                 if add_component_to_accrual_jv_entry:
                     if item.project:
+                        cost_center = item.payroll_cost_center
+                        if item.cost_center:
+                            cost_center = item.cost_center
                         component_dict[
                             (
                                 item.salary_component,
                                 item.project,
-                                item.payroll_cost_center,
+                                cost_center,
                             )
                         ] = (
                             component_dict.get(
                                 (
                                     item.salary_component,
                                     item.project,
-                                    item.payroll_cost_center,
+                                    cost_center,
                                 ),
                                 0,
                             )
@@ -91,7 +103,7 @@ class PayrollEntryOverride(PayrollEntry):
                 projects = frappe.get_list(
                     "Employee Project",
                     filters={"parent": employee_project[0]["name"]},
-                    fields=["project", "percent_pay"],
+                    fields=["project", "cost_center", "percent_pay"],
                 )
             if projects:
                 amount = i["amount"]
@@ -99,6 +111,7 @@ class PayrollEntryOverride(PayrollEntry):
                     sal_slip = i.copy()
                     sal_slip["amount"] = amount * (p["percent_pay"] / 100)
                     sal_slip["project"] = p["project"]
+                    sal_slip["cost_center"] = p["cost_center"]
                     salary_slips_with_project.append(sal_slip)
             else:
                 salary_slips_with_project.append(i)
@@ -136,7 +149,7 @@ class PayrollEntryOverride(PayrollEntry):
             currencies = []
             payable_amount = 0
             multi_currency = 0
-            company_currency = erpnext.get_company_currency(self.company)
+            company_currency = get_company_currency(self.company)
 
             # Earnings
             for acc_cc, amount in earnings.items():
@@ -183,7 +196,7 @@ class PayrollEntryOverride(PayrollEntry):
                             "credit_in_account_currency": flt(amt, precision),
                             "exchange_rate": flt(exchange_rate),
                             "cost_center": acc_cc[2] or self.cost_center,
-                            "project": acc_cc[2],
+                            "project": acc_cc[1],
                         },
                         accounting_dimensions,
                     )
